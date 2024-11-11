@@ -5,7 +5,8 @@ on:
     pull_request:
         branches:
             - main
-
+            
+permissions: write-all
 # code 
 jobs:
     model-evluation:
