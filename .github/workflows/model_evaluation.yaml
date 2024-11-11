@@ -5,7 +5,8 @@ on:
     pull_request:
         branches:
             - main
-
+            
+permissions: write-all
 # code 
 jobs:
     model-evluation:
@@ -15,6 +16,9 @@ jobs:
         steps:
             - name : Checkout code 
               uses: actions/checkout@v4
+              
+            - name : Setup CML
+              uses: iterative/setup-cml@v1
 
             - name : Setup Python3.11
               uses: actions/setup-python@v4
@@ -23,14 +27,15 @@ jobs:
 
             - name: Setup requirements 
               run:
-                python -m pip install --upgrade pip
                 pip install -r requiremets.txt
 
             - name: Run Model Evaluation
               run: python app.py 
 
-            - name: Show metrices 
-              uses: actions/upload-artifact@v3
-              with:
-                name: Evaluation Results
-                path: metrices.txt
+            - name: Write CML report
+              env:
+                REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+              run: |
+                # Post reports as comments in GitHub PRs
+                cat metrices.txt >> report.md
+                cml comment create report.md

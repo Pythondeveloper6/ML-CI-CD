@@ -17,8 +17,8 @@ x = data.data
 y = data.target 
 
 # define variables 
-random_state=12
-test_size=0.2
+random_state=40
+test_size=0.15
 
 
 # split 
