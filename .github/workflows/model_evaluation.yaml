@@ -1,0 +1,36 @@
+name: Model Evluation
+
+# triggers : events 
+on:
+    pull_request:
+        branches:
+            - main
+
+# code 
+jobs:
+    model-evluation:
+        runs-on: ubuntu-latest  # os linux 
+
+        # steps 
+        steps:
+            - name : Checkout code 
+              uses: actions/checkout@v4
+
+            - name : Setup Python3.11
+              uses: actions/setup-python@v4
+              with:
+                python-version: 3.11
+
+            - name: Setup requirements 
+              run:
+                python -m pip install --upgrade pip
+                pip install -r requiremets.txt
+
+            - name: Run Model Evaluation
+              run: python app.py 
+
+            - name: Show metrices 
+              uses: actions/upload-artifact@v3
+              with:
+                name: Evaluation Results
+                path: metrices.txt
